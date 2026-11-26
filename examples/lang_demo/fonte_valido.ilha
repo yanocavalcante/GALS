@@ -1,0 +1,5 @@
+prog {
+  var total = 10 + 20 ;
+  var delta = total + 5 ;
+  escreva ( delta ) ;
+} fim

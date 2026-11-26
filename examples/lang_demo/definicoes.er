@@ -1,0 +1,10 @@
+# Definicoes regulares da linguagem de demonstracao (INE5421)
+id: [a-zA-Z]([a-zA-Z] | [0-9])*
+num: [0-9]([0-9])*
+abre_chave: \{
+fecha_chave: \}
+abre_paren: \(
+fecha_paren: \)
+atrib: \=
+soma: \+
+ponto_virgula: \;

@@ -1,0 +1,12 @@
+⟨Programa⟩ ::= "prog" "{" ⟨ListaCmd⟩ "}" "fim"
+⟨ListaCmd⟩ ::= ⟨Cmd⟩ ⟨ListaCmd⟩
+⟨ListaCmd⟩ ::= &
+⟨Cmd⟩ ::= "var" id "=" ⟨Expr⟩ ";"
+⟨Cmd⟩ ::= id "=" ⟨Expr⟩ ";"
+⟨Cmd⟩ ::= "escreva" "(" ⟨Expr⟩ ")" ";"
+⟨Expr⟩ ::= ⟨Termo⟩ ⟨ExprResto⟩
+⟨ExprResto⟩ ::= "+" ⟨Termo⟩ ⟨ExprResto⟩
+⟨ExprResto⟩ ::= &
+⟨Termo⟩ ::= id
+⟨Termo⟩ ::= num
+⟨Termo⟩ ::= "(" ⟨Expr⟩ ")"

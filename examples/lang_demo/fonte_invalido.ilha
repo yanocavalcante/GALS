@@ -1,0 +1,4 @@
+prog {
+  var total = 10 + ;
+  escreva ( total ) ;
+} fim

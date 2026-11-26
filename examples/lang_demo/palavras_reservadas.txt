@@ -1,0 +1,4 @@
+prog
+fim
+var
+escreva
