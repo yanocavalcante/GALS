@@ -1,0 +1,44 @@
+pesca tainha fatorial(tainha n) {
+  capaz (n <= 1) {
+    traz 1;
+  }
+  traz n * fatorial(n - 1);
+}
+
+pesca tasounao ehPar(tainha x) {
+  traz x % 2 == 0;
+}
+
+pesca berbigao media(tainha a, tainha b, tainha c) {
+  traz (a + b + c) / 3.0;
+}
+
+ilha Floripa {
+  tainha quantas = 0;
+  tainha i;
+  berbigao m;
+  fofoca saudacao = "Ola,manezinho!Bora_pescar?";
+  tasounao achou = tastolo;
+
+  fala(saudacao);
+  escuta(quantas);
+
+  rema i de 1 ate quantas {
+    capaz (ehPar(i) e nao achou) {
+      fala("tainha_par:", i);
+    } ouentao capaz (i == 7) {
+      achou = dazumbanda;
+      fala("achei_a_tainha_da_sorte!");
+    } ouentao {
+      fala("tainha_impar:", i);
+    }
+  }
+
+  segue (quantas > 0 ou achou) {
+    quantas = quantas - 1;
+    achou = tastolo;
+  }
+
+  m = media(fatorial(3), -2, 10 % 4);
+  fala("media_da_pescaria:", m);
+}

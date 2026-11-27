@@ -1,0 +1,5 @@
+ilha Lagoa {
+  tainha peixes = 3;
+  peixes = peixes @ 2;
+  fala(peixes);
+}

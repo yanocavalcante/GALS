@@ -1,0 +1,6 @@
+ilha Floripa {
+  tainha peixes = 10;
+  capaz peixes > 5 {
+    fala("muita_tainha!");
+  }
+}

@@ -1,0 +1,71 @@
+<Programa> ::= <ListaFuncoes> ilha id <Bloco>
+<ListaFuncoes> ::= <ListaFuncoes> <Funcao>
+<ListaFuncoes> ::= &
+<Funcao> ::= pesca <Tipo> id "(" <Parametros> ")" <Bloco>
+<Parametros> ::= <ListaParametros>
+<Parametros> ::= &
+<ListaParametros> ::= <ListaParametros> "," <Tipo> id
+<ListaParametros> ::= <Tipo> id
+<Tipo> ::= tainha
+<Tipo> ::= berbigao
+<Tipo> ::= fofoca
+<Tipo> ::= tasounao
+<Bloco> ::= "{" <ListaComandos> "}"
+<ListaComandos> ::= <ListaComandos> <Comando>
+<ListaComandos> ::= &
+<Comando> ::= <Declaracao> ";"
+<Comando> ::= <Atribuicao> ";"
+<Comando> ::= <Chamada> ";"
+<Comando> ::= <Escrita> ";"
+<Comando> ::= <Leitura> ";"
+<Comando> ::= <Retorno> ";"
+<Comando> ::= <Condicional>
+<Comando> ::= <Enquanto>
+<Comando> ::= <Repeticao>
+<Declaracao> ::= <Tipo> id
+<Declaracao> ::= <Tipo> id "=" <Expressao>
+<Atribuicao> ::= id "=" <Expressao>
+<Chamada> ::= id "(" <Argumentos> ")"
+<Argumentos> ::= <ListaArgumentos>
+<Argumentos> ::= &
+<ListaArgumentos> ::= <ListaArgumentos> "," <Expressao>
+<ListaArgumentos> ::= <Expressao>
+<Escrita> ::= fala "(" <ListaArgumentos> ")"
+<Leitura> ::= escuta "(" id ")"
+<Retorno> ::= traz <Expressao>
+<Condicional> ::= capaz "(" <Expressao> ")" <Bloco> <Senao>
+<Senao> ::= ouentao <Bloco>
+<Senao> ::= ouentao <Condicional>
+<Senao> ::= &
+<Enquanto> ::= segue "(" <Expressao> ")" <Bloco>
+<Repeticao> ::= rema id de <Expressao> ate <Expressao> <Bloco>
+<Expressao> ::= <Expressao> ou <ExprE>
+<Expressao> ::= <ExprE>
+<ExprE> ::= <ExprE> e <ExprNao>
+<ExprE> ::= <ExprNao>
+<ExprNao> ::= nao <ExprNao>
+<ExprNao> ::= <ExprRel>
+<ExprRel> ::= <ExprArit> <OpRel> <ExprArit>
+<ExprRel> ::= <ExprArit>
+<OpRel> ::= "<"
+<OpRel> ::= "<="
+<OpRel> ::= ">"
+<OpRel> ::= ">="
+<OpRel> ::= "=="
+<OpRel> ::= "!="
+<ExprArit> ::= <ExprArit> "+" <Termo>
+<ExprArit> ::= <ExprArit> "-" <Termo>
+<ExprArit> ::= <Termo>
+<Termo> ::= <Termo> "*" <Fator>
+<Termo> ::= <Termo> "/" <Fator>
+<Termo> ::= <Termo> "%" <Fator>
+<Termo> ::= <Fator>
+<Fator> ::= "(" <Expressao> ")"
+<Fator> ::= "-" <Fator>
+<Fator> ::= id
+<Fator> ::= <Chamada>
+<Fator> ::= num
+<Fator> ::= real
+<Fator> ::= cadeia
+<Fator> ::= dazumbanda
+<Fator> ::= tastolo
