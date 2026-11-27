@@ -42,14 +42,28 @@ class LRItem:
 
 
 def is_non_terminal(sym: str) -> bool:
-    return sym.startswith("⟨") and sym.endswith("⟩") and len(sym) > 2
+    return (
+        (sym.startswith("⟨") and sym.endswith("⟩"))
+        or (sym.startswith("<") and sym.endswith(">"))
+    ) and len(sym) > 2
+
+
+def non_terminal_delimiters(sym: str) -> Tuple[str, str]:
+    """Retorna os delimitadores usados por um não terminal validado."""
+    if sym.startswith("⟨"):
+        return "⟨", "⟩"
+    if sym.startswith("<"):
+        return "<", ">"
+    raise ValueError(f"Nao terminal invalido: {sym}")
 
 
 def parse_grammar_text(grammar_text: str) -> Tuple[List[Production], str, Set[str], Set[str]]:
     """
     Le uma GLC no formato:
-      ⟨Nao terminal⟩ ::= ⟨Corpo da producao⟩
-    Nao terminais aparecem entre ⟨ e ⟩.
+      ⟨Nao terminal⟩ ::= corpo
+    ou:
+      <Nao terminal> ::= corpo
+    Nao terminais podem aparecer entre ⟨ e ⟩ ou entre < e >.
     Caracteres especiais literais podem aparecer entre aspas "", ex.: "[" ou "]".
     Simbolo de escape / vazio: &.
     """
@@ -72,7 +86,7 @@ def parse_grammar_text(grammar_text: str) -> Tuple[List[Production], str, Set[st
             start_nt = lhs
         non_terminals.add(lhs)
 
-        # Tokeniza corpo da producao respeitando ⟨...⟩, "..." e escape &
+        # Tokeniza corpo da producao respeitando não terminais, "..." e escape &.
         rhs_tokens: List[str] = []
         i = 0
         n = len(rhs_raw)
@@ -82,15 +96,16 @@ def parse_grammar_text(grammar_text: str) -> Tuple[List[Production], str, Set[st
                 i += 1
                 continue
             if ch == "&":
-                if i + 1 < n and not rhs_raw[i + 1].isspace() and rhs_raw[i + 1] not in {"⟨", '"'}:
+                if i + 1 < n and not rhs_raw[i + 1].isspace() and rhs_raw[i + 1] not in {"⟨", "<", '"'}:
                     # Escape & seguido de caractere
                     rhs_tokens.append(rhs_raw[i + 1])
                     i += 2
                 else:
                     rhs_tokens.append(EPSILON)
                     i += 1
-            elif ch == "⟨":
-                end_p = rhs_raw.find("⟩", i + 1)
+            elif ch in {"⟨", "<"}:
+                close_delimiter = "⟩" if ch == "⟨" else ">"
+                end_p = rhs_raw.find(close_delimiter, i + 1)
                 if end_p == -1:
                     raise ValueError(f"Nao terminal nao fechado em: {line}")
                 nt = rhs_raw[i : end_p + 1].strip()
@@ -106,9 +121,9 @@ def parse_grammar_text(grammar_text: str) -> Tuple[List[Production], str, Set[st
                 terminals.add(lit)
                 i = end_q + 1
             else:
-                # Le simbolo/token ate espaco, ⟨ ou "
+                # Le simbolo/token ate espaco, delimitador de não terminal ou ".
                 start_s = i
-                while i < n and not rhs_raw[i].isspace() and rhs_raw[i] not in {"⟨", '"'}:
+                while i < n and not rhs_raw[i].isspace() and rhs_raw[i] not in {"⟨", "<", '"'}:
                     if rhs_raw[i] == "&" and i + 1 < n:
                         i += 2
                     else:
@@ -128,10 +143,11 @@ def parse_grammar_text(grammar_text: str) -> Tuple[List[Production], str, Set[st
     if start_nt is None:
         raise ValueError("Gramatica vazia.")
 
-    # Aumenta gramatica com ⟨S'⟩ ::= ⟨S⟩
-    aug_lhs = f"{start_nt[:-1]}'⟩"
+    # Mantem a notação do símbolo inicial na gramática aumentada.
+    open_delimiter, close_delimiter = non_terminal_delimiters(start_nt)
+    aug_lhs = f"{open_delimiter}{start_nt[1:-1]}'{close_delimiter}"
     while aug_lhs in non_terminals:
-        aug_lhs = f"{aug_lhs[:-1]}'⟩"
+        aug_lhs = f"{open_delimiter}{aug_lhs[1:-1]}'{close_delimiter}"
     aug_prod = Production(index=0, lhs=aug_lhs, rhs=(start_nt,))
     shifted_prods = [aug_prod]
     for p in productions:
